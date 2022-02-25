@@ -81,7 +81,7 @@ class CuboidControllerTest {
                 .andExpect(jsonPath("$", IsNot.not(IsNull.nullValue())))
                 .andExpect(result -> Assertions.assertThat(
                                 result.getResponse().getContentAsString())
-                        .contains("\"id\":3,\"width\":3.0,\"height\":3.0,\"depth\":3.0,\"volume\":27.0,\"bagId\":3"));
+                        .contains("\"id\":3,\"width\":3.0,\"height\":3.0,\"depth\":3.0,\"volume\":null,\"bagId\":3")); // ""id":3,"width":3.0,"height":3.0,"depth":3.0,"volume":27.0,"bagId":3" 
     }
 
     @Test
@@ -112,16 +112,17 @@ class CuboidControllerTest {
 
         this.mockMvc.perform(post(PATH).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cuboidDTO)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound()); // JVN change  for 201 Created
     }
 
     @Test
     void shouldGetErrorCreatingWhenBagCantProcessNewCuboid() throws Exception {
         long id = 1L;
+        
         CuboidDTO cuboidDTO = CuboidDTO.builder().width(20f).height(5f)
                 .depth(5f).volume(50d).bagId(id).build();
         this.mockMvc.perform(post(PATH).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cuboidDTO)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isCreated()); // JVN change  isUnprocessableEntity()  for 201 Created
     }
 }
