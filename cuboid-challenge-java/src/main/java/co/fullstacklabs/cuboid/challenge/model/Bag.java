@@ -43,8 +43,7 @@ public class Bag {
     	//JVN
         this.setVolume(volume);
         this.setTitle(title);
-       // this.volume = volume;
-        //this.title= title;
+
     }
 
     

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
  * Implementation class for BagService
  *
@@ -68,6 +69,44 @@ public class CuboidServiceImpl implements CuboidService {
         return bagRepository.findById(bagId).orElseThrow(() -> new ResourceNotFoundException("Bag not found"));
     }
 
+    /**
+     * Delete a cuboid given its id
+     *
+     * @param cuboID id of the cuboit tobe deleted
+     * @return void
+     */
+	@Override
+    @Transactional
+	public void delete(Long cuboID) {
+		repository.findById(cuboID).orElseThrow(() -> new ResourceNotFoundException("Cuboid not found"));
+		repository.deleteById(cuboID); 		
+	}
+
+    /**
+     * get a cuboid given its id
+     *
+     * @param cuboID id of the cuboit tobe deleted
+     * @return Cuboid object finded
+     */
+	public CuboidDTO getCuboidById(Long cuboID) {
+		Cuboid cuboid = repository.findById(cuboID).orElseThrow(() -> new ResourceNotFoundException("Cuboid not found"));
+		return mapper.map(cuboid, CuboidDTO.class);
+	}
+    
+    /**
+     * Delete a cuboid given its id
+     *
+     * @param cuboID id of the cuboit tobe updated
+     * @return CuboidDTO with the data created
+     */
+	@Override
+    @Transactional
+	public Cuboid update(Long cuboidID, Cuboid cuboid) {
+		Cuboid _Cuboid = repository.findById(cuboidID).orElseThrow(() -> new ResourceNotFoundException("Cuboid not found"));
+
+		cuboid.setId(_Cuboid.getId());
+		return repository.save(cuboid);
+	}
 
   
 }

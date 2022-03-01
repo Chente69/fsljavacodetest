@@ -13,6 +13,13 @@ import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+   @ExceptionHandler(value = {DeleteErrCuboiIDNotFound.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ErrorDetails deleteErrCuboiIDNotFound(DeleteErrCuboiIDNotFound ex, WebRequest request) {
+        return new ErrorDetails(ex.getMessage(), request.getDescription(false));
+    }
+	   
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorDetails resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
