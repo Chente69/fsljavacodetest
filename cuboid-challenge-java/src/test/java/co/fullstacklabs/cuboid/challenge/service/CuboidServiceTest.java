@@ -55,56 +55,65 @@ class CuboidServiceTest {
 
     @Test
     void updateWithCuboidNotFound() {
-    	assertTrue(true);
+        Bag bag = BagTestBuilder.builder().id(10L).title("title").volume(200d).build();
+        Cuboid cuboid = CuboidTestBuilder.builder().id(9L).width(2f).height(3f).depth(4f).bag(bag).build();
+        Cuboid newCuboid = CuboidTestBuilder.builder().width(4f).height(7f).depth(3f).bag(bag).build();
+        Mockito.when(repository.findById(cuboid.getId())).thenReturn(Optional.of(cuboid));
+        
+        
+        Assertions.assertThrows(DeleteErrCuboiIDNotFound.class, () ->cuboidService.update(cuboid.getId(),newCuboid));
    
     }
 
     @Test
     void updateWithBagNotFound() {
-    	//Assertions.assertThrows(ResourceNotFoundException.class, () -> cuboidService.update(1L));
-    	assertTrue(true);
+        Bag bag = BagTestBuilder.builder().id(10L).title("title").volume(200d).build();
+        Cuboid cuboid = CuboidTestBuilder.builder().id(9L).width(2f).height(3f).depth(4f).bag(bag).build();
+        Cuboid newCuboid = CuboidTestBuilder.builder().width(4f).height(7f).depth(3f).bag(bag).build();
+        Mockito.when(repository.findById(cuboid.getId())).thenReturn(Optional.of(cuboid));
+        
+        
+        Assertions.assertThrows(ResourceNotFoundException.class, () ->cuboidService.update(cuboid.getId(),newCuboid));
+
     }
 
     @Test
     void updateWithBagNotEnoughCapacity() {
-    	//Assertions.assertThrows(UnprocessableEntityException.class, () -> cuboidService.update(1L));
-    	assertTrue(true);
+        Bag bag = BagTestBuilder.builder().id(10L).title("title").volume(200d).build();
+        Cuboid cuboid = CuboidTestBuilder.builder().id(9L).width(2f).height(3f).depth(4f).bag(bag).build();
+        Cuboid newCuboid = CuboidTestBuilder.builder().width(4f).height(7f).depth(3f).bag(bag).build();
+        Mockito.when(repository.findById(cuboid.getId())).thenReturn(Optional.of(cuboid));
+        
+        
+        Assertions.assertThrows(ResourceNotFoundException.class, () ->cuboidService.update(cuboid.getId(),newCuboid));
+
     }
     @Test
     void deleteWithSuccess() {
     	
-    	//System.out.println("deleteWithSuccess:" );
         Bag bag = BagTestBuilder.builder().id(10L).title("title").volume(200d).build();
         Cuboid cuboid = CuboidTestBuilder.builder().id(9L).width(2f).height(3f).depth(4f).bag(bag).build();
         CuboidDTO cuboidDTO = CuboidDTO.builder()
         		.id(cuboid.getId())
                 .width(cuboid.getWidth()).height(cuboid.getHeight())
                 .depth(cuboid.getDepth()).bagId(bag.getId()).build();
-        //Mockito.when(mapper.map(cuboidDTO, Cuboid.class)).thenReturn(cuboid);
-        //System.out.println("Buscando cuboid ID:"+cuboidDTO.getId() );
-        Mockito.when(repository.findById(cuboid.getId())).thenReturn(Optional.of(cuboid));
-        //System.out.println("Borrando cuboid ID:"+cuboidDTO.getId() );
+         Mockito.when(repository.findById(cuboid.getId())).thenReturn(Optional.of(cuboid));
         cuboidService.delete(cuboid.getId());
         Assertions.assertTrue(true);
-       // Mockito.verify(repository).deleteById(cuboid.getId());
-        //System.out.println("Borrado cuboid ID:"+cuboid.getId() );
-
+  
     }
 
     @Test
     void deleteWithErrorNoCuboid() {
-    	//System.out.println("deleteWithErrorNoCuboid:" );
-        Bag bag = BagTestBuilder.builder().id(99L).title("title").volume(200d).build();
-        Cuboid cuboid = CuboidTestBuilder.builder().id(99L).width(2f).height(3f).depth(4f).bag(bag).build();
+
+        Bag bag = BagTestBuilder.builder().id(10L).title("title").volume(200d).build();
+        Cuboid cuboid = CuboidTestBuilder.builder().id(9L).width(2f).height(3f).depth(4f).bag(bag).build();
         CuboidDTO cuboidDTO = CuboidDTO.builder()
         		.id(cuboid.getId())
                 .width(cuboid.getWidth()).height(cuboid.getHeight())
                 .depth(cuboid.getDepth()).bagId(bag.getId()).build();
-        //Mockito.when(mapper.map(cuboidDTO, Cuboid.class)).thenReturn(cuboid);
-        //System.out.println("Buscando cuboid ID:"+cuboidDTO.getId() );
-        Mockito.when(repository.findById(cuboid.getId())).thenReturn(Optional.of(cuboid));
-        //System.out.println("Borrando cuboid ID:"+cuboidDTO.getId() );
-    	Assertions.assertThrows(DeleteErrCuboiIDNotFound.class, () ->cuboidService.delete(99L));
+         Mockito.when(repository.findById(cuboid.getId())).thenReturn(Optional.of(cuboid));;
+    	Assertions.assertThrows(UnprocessableEntityException.class, () ->cuboidService.delete(cuboid.getId()));
     }
 
     /************************************************************
